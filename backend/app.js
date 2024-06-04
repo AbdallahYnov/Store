@@ -8,6 +8,7 @@ app.use(cors({
     origin: '*'
 })) 
 
+
 const routeAccueil = require("./route/route.js");
 
 app.use(routeAccueil);
