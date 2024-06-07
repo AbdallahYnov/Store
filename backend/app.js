@@ -11,5 +11,6 @@ app.use(cors({
 
 const routeAccueil = require("./route/route.js");
 
+
 app.use(routeAccueil);
 app.listen(port, () => console.log(`listening on port  ${port}`));
