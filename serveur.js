@@ -20,11 +20,11 @@ db.connect(err => {
 });
 
 // Route pour récupérer les jeux avec filtrage et tri
-app.get('/games', (req, res) => {
+app.get('/products', (req, res) => {
   const genreFilter = req.query.genre || '';
   const sortOrder = req.query.sort || 'ASC';
   
-  let sql = 'SELECT * FROM games';
+  let sql = 'SELECT * FROM products';
   const params = [];
   
   if (genreFilter) {
