@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="/frontend/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Checkout</h1>
+        <nav>
+            <ul>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+                <li><a href="/cart">Cart</a></li>
+                <li><a href="/profile">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Checkout</h2>
+        <form action="/checkout" method="post">
+            <label for="address">Shipping Address:</label>
+            <input type="text" id="address" name="address" required>
+            <label for="payment">Payment Method:</label>
+            <input type="text" id="payment" name="payment" required>
+            <button type="submit">Place Order</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 Amazon-like Store</p>
+    </footer>
+</body>
+</html>
