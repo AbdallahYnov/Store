@@ -8,20 +8,46 @@ body {
 header {
     background-color: #232f3e;
     color: white;
-    padding: 10px 20px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
 }
 
-header h1 {
-    margin: 0;
+header .logo {
+    display: flex;
+    align-items: center;
+}
+
+header .logo-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    letter-spacing: -0.5px;
+}
+
+header .logo-arrow {
+    position: absolute;
+    bottom: 1px;
+    left: 1vb;
+    width: 140px;
+    height: 12px;
+    border-bottom: 4px solid #FF9900;
+    border-left: 4px solid #FF9900;
+    border-radius: 0 0 50px 50px;
+    transform: rotate(-15deg);
+    transform-origin: left bottom;
 }
 
 nav ul {
     list-style-type: none;
     padding: 0;
+    display: flex;
+    margin: 0;
 }
 
 nav ul li {
-    display: inline;
     margin-right: 10px;
 }
 
@@ -42,4 +68,159 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
+}
+
+/* Styles for the burger menu */
+#checkbox {
+    display: none;
+}
+
+.toggle {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 25px;
+    cursor: pointer;
+    margin-left: auto; /* Align to the right */
+    position: fixed; /* Keep it fixed */
+    top: 15px; /* Adjust position */
+    right: 20px; /* Adjust position */
+    z-index: 2; /* Ensure it stays above the menu */
+}
+
+.bars {
+    width: 100%;
+    height: 4px;
+    background-color: white;
+    border-radius: 4px;
+    margin: 4px 0;
+    transition: transform 0.5s, opacity 0.5s;
+}
+
+/* Change the icon to a cross */
+#checkbox:checked + .toggle .bars:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+#checkbox:checked + .toggle .bars:nth-child(2) {
+    opacity: 0;
+}
+
+#checkbox:checked + .toggle .bars:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Carousel Styles */
+.carousel {
+    position: relative;
+    width: 100%;
+    margin: 20px auto;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    flex: 0 0 33.333%; /* Show 3 items at a time */
+    box-sizing: border-box;
+    padding: 20px;
+    background-color: #fff;
+    text-align: center;
+}
+
+.carousel-item img {
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.carousel-item h3 {
+    margin: 10px 0 5px;
+}
+
+.carousel-item p {
+    margin: 5px 0;
+}
+
+.carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.carousel-control.prev {
+    left: 10px;
+}
+
+.carousel-control.next {
+    right: 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    header {
+        flex-wrap: wrap;
+    }
+
+    .desktop-menu {
+        display: none; /* Hide desktop menu on small screens */
+    }
+
+    .toggle {
+        display: flex; /* Show burger icon on small screens */
+    }
+
+    .mobile-menu {
+        display: none; /* Hide mobile menu by default */
+        flex-direction: column;
+        background-color: #232f3e;
+        position: fixed;
+        top: 0;
+        right: 0; /* Align to the right */
+        width: 50%; /* Half the screen width */
+        height: 100%; /* Full height */
+        padding: 60px 20px; /* Adjust to match the header height */
+        box-shadow: -2px 0 5px rgba(0,0,0,0.5); /* Add shadow for better separation */
+        z-index: 1; /* Ensure it appears above other content */
+    }
+
+    #checkbox:checked ~ nav .mobile-menu {
+        display: flex; /* Show mobile menu when checkbox is checked */
+    }
+
+    .mobile-menu li {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .mobile-menu li a {
+        display: block;
+        padding: 10px;
+        width: 100%;
+    }
+
+    /* Carousel Styles for Small Screens */
+    .carousel-item {
+        flex: 0 0 100%; /* Show 1 item at a time on small screens */
+    }
+}
+
+@media (min-width: 769px) {
+    .mobile-menu {
+        display: none; /* Hide mobile menu on large screens */
+    }
 }
