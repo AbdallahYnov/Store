@@ -1,35 +1,72 @@
 const db = require('../config/db');
 
-const Product = {};
+class Product {
+    static getAll() {
+        const query = 'SELECT * FROM products';
+        return new Promise((resolve, reject) => {
+            db.query(query, (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 
-Product.getAll = (callback) => {
-    db.query('SELECT * FROM products', callback);
-};
+    static getById(productID) {
+        const query = 'SELECT * FROM products WHERE product_id = ?';
+        return new Promise((resolve, reject) => {
+            db.query(query, [productID], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results[0]);
+                }
+            });
+        });
+    }
 
-Product.getById = (id, callback) => {
-    db.query('SELECT * FROM products WHERE product_id = ?', [id], callback);
-};
+    static create(productData) {
+        const { name, description, price, quantity, couleur, type, gender, size, discount_id, category_id } = productData;
+        const query = 'INSERT INTO products (name, description, price, quantity, couleur, type, gender, size, discount_id, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        return new Promise((resolve, reject) => {
+            db.query(query, [name, description, price, quantity, couleur, type, gender, size, discount_id, category_id], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 
-Product.create = (productData, callback) => {
-    const { name, description, price, quantity, couleur, type, gender, size, discount_id, category_id } = productData;
-    db.query(
-        'INSERT INTO products (name, description, price, quantity, couleur, type, gender, size, discount_id, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [name, description, price, quantity, couleur, type, gender, size, discount_id, category_id],
-        callback
-    );
-};
+    static update(productID, productData) {
+        const { name, description, price, quantity, couleur, type, gender, size, discount_id, category_id } = productData;
+        const query = 'UPDATE products SET name = ?, description = ?, price = ?, quantity = ?, couleur = ?, type = ?, gender = ?, size = ?, discount_id = ?, category_id = ? WHERE product_id = ?';
+        return new Promise((resolve, reject) => {
+            db.query(query, [name, description, price, quantity, couleur, type, gender, size, discount_id, category_id, productID], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 
-Product.update = (id, productData, callback) => {
-    const { name, description, price, quantity, couleur, type, gender, size, discount_id, category_id } = productData;
-    db.query(
-        'UPDATE products SET name = ?, description = ?, price = ?, quantity = ?, couleur = ?, type = ?, gender = ?, size = ?, discount_id = ?, category_id = ? WHERE product_id = ?',
-        [name, description, price, quantity, couleur, type, gender, size, discount_id, category_id, id],
-        callback
-    );
-};
-
-Product.delete = (id, callback) => {
-    db.query('DELETE FROM products WHERE product_id = ?', [id], callback);
-};
+    static delete(productID) {
+        const query = 'DELETE FROM products WHERE product_id = ?';
+        return new Promise((resolve, reject) => {
+            db.query(query, [productID], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
+}
 
 module.exports = Product;

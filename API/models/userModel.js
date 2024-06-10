@@ -1,39 +1,85 @@
 const db = require('../config/db');
 
-const User = {};
+class User {
+    static getAll() {
+        const query = 'SELECT * FROM users';
+        return new Promise((resolve, reject) => {
+            db.query(query, (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 
-User.getAll = (callback) => {
-    db.query('SELECT * FROM users', callback);
-};
+    static getById(userID) {
+        const query = 'SELECT * FROM users WHERE user_id = ?';
+        return new Promise((resolve, reject) => {
+            db.query(query, [userID], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results[0]);
+                }
+            });
+        });
+    }
 
-User.getById = (id, callback) => {
-    db.query('SELECT * FROM users WHERE user_id = ?', [id], callback);
-};
+    static getByUsername(username) {
+        const query = 'SELECT * FROM users WHERE username = ?';
+        return new Promise((resolve, reject) => {
+            db.query(query, [username], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results[0]);
+                }
+            });
+        });
+    }
 
-User.getByUsername = (username, callback) => {
-    db.query('SELECT * FROM users WHERE username = ?', [username], callback);
-};
+    static create(userData) {
+        const { email, username, password, basket, role, address } = userData;
+        const query = 'INSERT INTO users (email, username, password, basket, role, address) VALUES (?, ?, ?, ?, ?, ?)';
+        return new Promise((resolve, reject) => {
+            db.query(query, [email, username, password, basket, role, address], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 
-User.create = (userData, callback) => {
-    const { email, username, password, basket, role, address } = userData;
-    db.query(
-        'INSERT INTO users (email, username, password, basket, role, address) VALUES (?, ?, ?, ?, ?, ?)',
-        [email, username, password, basket, role, address],
-        callback
-    );
-};
+    static update(userID, userData) {
+        const { email, username, password, basket, role, address } = userData;
+        const query = 'UPDATE users SET email = ?, username = ?, password = ?, basket = ?, role = ?, address = ? WHERE user_id = ?';
+        return new Promise((resolve, reject) => {
+            db.query(query, [email, username, password, basket, role, address, userID], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 
-User.update = (id, userData, callback) => {
-    const { email, username, password, basket, role, address } = userData;
-    db.query(
-        'UPDATE users SET email = ?, username = ?, password = ?, basket = ?, role = ?, address = ? WHERE user_id = ?',
-        [email, username, password, basket, role, address, id],
-        callback
-    );
-};
-
-User.delete = (id, callback) => {
-    db.query('DELETE FROM users WHERE user_id = ?', [id], callback);
-};
+    static delete(userID) {
+        const query = 'DELETE FROM users WHERE user_id = ?';
+        return new Promise((resolve, reject) => {
+            db.query(query, [userID], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
+}
 
 module.exports = User;

@@ -1,35 +1,72 @@
 const db = require('../config/db');
 
-const Category = {};
+class Category {
+    static getAll() {
+        const query = 'SELECT * FROM categories';
+        return new Promise((resolve, reject) => {
+            db.query(query, (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 
-Category.getAll = (callback) => {
-    db.query('SELECT * FROM categories', callback);
-};
+    static getById(categoryID) {
+        const query = 'SELECT * FROM categories WHERE category_id = ?';
+        return new Promise((resolve, reject) => {
+            db.query(query, [categoryID], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results[0]);
+                }
+            });
+        });
+    }
 
-Category.getById = (id, callback) => {
-    db.query('SELECT * FROM categories WHERE category_id = ?', [id], callback);
-};
+    static create(categoryData) {
+        const { name, size } = categoryData;
+        const query = 'INSERT INTO categories (name, size) VALUES (?, ?)';
+        return new Promise((resolve, reject) => {
+            db.query(query, [name, size], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 
-Category.create = (categoryData, callback) => {
-    const { name, size } = categoryData;
-    db.query(
-        'INSERT INTO categories (name, size) VALUES (?, ?)',
-        [name, size],
-        callback
-    );
-};
+    static update(categoryID, categoryData) {
+        const { name, size } = categoryData;
+        const query = 'UPDATE categories SET name = ?, size = ? WHERE category_id = ?';
+        return new Promise((resolve, reject) => {
+            db.query(query, [name, size, categoryID], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 
-Category.update = (id, categoryData, callback) => {
-    const { name, size } = categoryData;
-    db.query(
-        'UPDATE categories SET name = ?, size = ? WHERE category_id = ?',
-        [name, size, id],
-        callback
-    );
-};
-
-Category.delete = (id, callback) => {
-    db.query('DELETE FROM categories WHERE category_id = ?', [id], callback);
-};
+    static delete(categoryID) {
+        const query = 'DELETE FROM categories WHERE category_id = ?';
+        return new Promise((resolve, reject) => {
+            db.query(query, [categoryID], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
+}
 
 module.exports = Category;

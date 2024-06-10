@@ -1,35 +1,72 @@
 const db = require('../config/db');
 
-const Order = {};
+class Order {
+    static getAll() {
+        const query = 'SELECT * FROM orders';
+        return new Promise((resolve, reject) => {
+            db.query(query, (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 
-Order.getAll = (callback) => {
-    db.query('SELECT * FROM orders', callback);
-};
+    static getById(orderID) {
+        const query = 'SELECT * FROM orders WHERE order_id = ?';
+        return new Promise((resolve, reject) => {
+            db.query(query, [orderID], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results[0]);
+                }
+            });
+        });
+    }
 
-Order.getById = (id, callback) => {
-    db.query('SELECT * FROM orders WHERE order_id = ?', [id], callback);
-};
+    static create(orderData) {
+        const { total, purchase_date, creation_date, address, state, user_id } = orderData;
+        const query = 'INSERT INTO orders (total, purchase_date, creation_date, address, state, user_id) VALUES (?, ?, ?, ?, ?, ?)';
+        return new Promise((resolve, reject) => {
+            db.query(query, [total, purchase_date, creation_date, address, state, user_id], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 
-Order.create = (orderData, callback) => {
-    const { total, purchase_date, creation_date, address, state, user_id } = orderData;
-    db.query(
-        'INSERT INTO orders (total, purchase_date, creation_date, address, state, user_id) VALUES (?, ?, ?, ?, ?, ?)',
-        [total, purchase_date, creation_date, address, state, user_id],
-        callback
-    );
-};
+    static update(orderID, orderData) {
+        const { total, purchase_date, creation_date, address, state, user_id } = orderData;
+        const query = 'UPDATE orders SET total = ?, purchase_date = ?, creation_date = ?, address = ?, state = ?, user_id = ? WHERE order_id = ?';
+        return new Promise((resolve, reject) => {
+            db.query(query, [total, purchase_date, creation_date, address, state, user_id, orderID], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 
-Order.update = (id, orderData, callback) => {
-    const { total, purchase_date, creation_date, address, state, user_id } = orderData;
-    db.query(
-        'UPDATE orders SET total = ?, purchase_date = ?, creation_date = ?, address = ?, state = ?, user_id = ? WHERE order_id = ?',
-        [total, purchase_date, creation_date, address, state, user_id, id],
-        callback
-    );
-};
-
-Order.delete = (id, callback) => {
-    db.query('DELETE FROM orders WHERE order_id = ?', [id], callback);
-};
+    static delete(orderID) {
+        const query = 'DELETE FROM orders WHERE order_id = ?';
+        return new Promise((resolve, reject) => {
+            db.query(query, [orderID], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
+}
 
 module.exports = Order;
