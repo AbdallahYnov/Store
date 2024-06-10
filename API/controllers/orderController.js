@@ -1,54 +1,78 @@
 const Order = require('../models/orderModel');
 
-exports.getAllOrders = (req, res) => {
-    Order.getAll((err, results) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
-        }
-        res.json(results);
-    });
+// Get all orders
+exports.getAllOrders = async (req, res) => {
+    try {
+        const orders = await Order.getAll();
+        res.status(200).json(orders);
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.getOrderById = (req, res) => {
-    const { id } = req.params;
-    Order.getById(id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
+// Get order by ID
+exports.getOrderById = async (req, res) => {
+    const orderId = req.params.id;
+    try {
+        const order = await Order.getById(orderId);
+        if (!order) {
+            return res.status(404).json({ message: "Order not found" });
         }
-        res.json(result[0]);
-    });
+        res.status(200).json(order);
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.createOrder = (req, res) => {
-    const { total, purchase_date, creation_date, address, state, user_id } = req.body;
-    const newOrder = { total, purchase_date, creation_date, address, state, user_id };
-
-    Order.create(newOrder, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error creating order', error: err });
-        }
-        res.status(201).json({ message: 'Order created successfully' });
-    });
+// Create new order
+exports.createOrder = async (req, res) => {
+    try {
+        const result = await Order.create(req.body);
+        res.status(201).json({ message: "Order created successfully", orderId: result.insertId });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.updateOrder = (req, res) => {
-    const { id } = req.params;
-    const { total, purchase_date, creation_date, address, state, user_id } = req.body;
-
-    Order.update(id, { total, purchase_date, creation_date, address, state, user_id }, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error updating order', error: err });
+// Update order
+exports.updateOrder = async (req, res) => {
+    const orderId = req.params.id;
+    try {
+        const result = await Order.update(orderId, req.body);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Order not found" });
         }
-        res.json({ message: 'Order updated successfully' });
-    });
+        res.status(200).json({ message: "Order updated successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.deleteOrder = (req, res) => {
-    const { id } = req.params;
-    Order.delete(id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
+// Delete order
+exports.deleteOrder = async (req, res) => {
+    const orderId = req.params.id;
+    try {
+        const result = await Order.delete(orderId);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Order not found" });
         }
-        res.json({ message: 'Order deleted successfully' });
-    });
+        res.status(200).json({ message: "Order deleted successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };

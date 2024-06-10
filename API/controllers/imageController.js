@@ -1,54 +1,78 @@
 const Image = require('../models/imageModel');
 
-exports.getAllImages = (req, res) => {
-    Image.getAll((err, results) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
-        }
-        res.json(results);
-    });
+// Get all images
+exports.getAllImages = async (req, res) => {
+    try {
+        const images = await Image.getAll();
+        res.status(200).json(images);
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.getImageById = (req, res) => {
-    const { id } = req.params;
-    Image.getById(id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
+// Get image by ID
+exports.getImageById = async (req, res) => {
+    const imageId = req.params.id;
+    try {
+        const image = await Image.getById(imageId);
+        if (!image) {
+            return res.status(404).json({ message: "Image not found" });
         }
-        res.json(result[0]);
-    });
+        res.status(200).json(image);
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.createImage = (req, res) => {
-    const { name, chemin, idx, product_id } = req.body;
-    const newImage = { name, chemin, idx, product_id };
-
-    Image.create(newImage, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error creating image', error: err });
-        }
-        res.status(201).json({ message: 'Image created successfully' });
-    });
+// Create new image
+exports.createImage = async (req, res) => {
+    try {
+        const result = await Image.create(req.body);
+        res.status(201).json({ message: "Image created successfully", imageId: result.insertId });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.updateImage = (req, res) => {
-    const { id } = req.params;
-    const { name, chemin, idx, product_id } = req.body;
-
-    Image.update(id, { name, chemin, idx, product_id }, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error updating image', error: err });
+// Update image
+exports.updateImage = async (req, res) => {
+    const imageId = req.params.id;
+    try {
+        const result = await Image.update(imageId, req.body);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Image not found" });
         }
-        res.json({ message: 'Image updated successfully' });
-    });
+        res.status(200).json({ message: "Image updated successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.deleteImage = (req, res) => {
-    const { id } = req.params;
-    Image.delete(id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
+// Delete image
+exports.deleteImage = async (req, res) => {
+    const imageId = req.params.id;
+    try {
+        const result = await Image.delete(imageId);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Image not found" });
         }
-        res.json({ message: 'Image deleted successfully' });
-    });
+        res.status(200).json({ message: "Image deleted successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };

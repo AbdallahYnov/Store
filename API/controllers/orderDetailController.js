@@ -1,54 +1,78 @@
 const OrderDetail = require('../models/orderDetailModel');
 
-exports.getAllOrderDetails = (req, res) => {
-    OrderDetail.getAll((err, results) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
-        }
-        res.json(results);
-    });
+// Get all order details
+exports.getAllOrderDetails = async (req, res) => {
+    try {
+        const orderDetails = await OrderDetail.getAll();
+        res.status(200).json(orderDetails);
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.getOrderDetailById = (req, res) => {
-    const { id } = req.params;
-    OrderDetail.getById(id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
+// Get order detail by ID
+exports.getOrderDetailById = async (req, res) => {
+    const orderDetailId = req.params.id;
+    try {
+        const orderDetail = await OrderDetail.getById(orderDetailId);
+        if (!orderDetail) {
+            return res.status(404).json({ message: "Order detail not found" });
         }
-        res.json(result[0]);
-    });
+        res.status(200).json(orderDetail);
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.createOrderDetail = (req, res) => {
-    const { quantity, price, product, product_id, order_id } = req.body;
-    const newOrderDetail = { quantity, price, product, product_id, order_id };
-
-    OrderDetail.create(newOrderDetail, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error creating order detail', error: err });
-        }
-        res.status(201).json({ message: 'Order detail created successfully' });
-    });
+// Create new order detail
+exports.createOrderDetail = async (req, res) => {
+    try {
+        const result = await OrderDetail.create(req.body);
+        res.status(201).json({ message: "Order detail created successfully", orderDetailId: result.insertId });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.updateOrderDetail = (req, res) => {
-    const { id } = req.params;
-    const { quantity, price, product, product_id, order_id } = req.body;
-
-    OrderDetail.update(id, { quantity, price, product, product_id, order_id }, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error updating order detail', error: err });
+// Update order detail
+exports.updateOrderDetail = async (req, res) => {
+    const orderDetailId = req.params.id;
+    try {
+        const result = await OrderDetail.update(orderDetailId, req.body);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Order detail not found" });
         }
-        res.json({ message: 'Order detail updated successfully' });
-    });
+        res.status(200).json({ message: "Order detail updated successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.deleteOrderDetail = (req, res) => {
-    const { id } = req.params;
-    OrderDetail.delete(id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
+// Delete order detail
+exports.deleteOrderDetail = async (req, res) => {
+    const orderDetailId = req.params.id;
+    try {
+        const result = await OrderDetail.delete(orderDetailId);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Order detail not found" });
         }
-        res.json({ message: 'Order detail deleted successfully' });
-    });
+        res.status(200).json({ message: "Order detail deleted successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };

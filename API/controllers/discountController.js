@@ -1,54 +1,78 @@
 const Discount = require('../models/discountModel');
 
-exports.getAllDiscounts = (req, res) => {
-    Discount.getAll((err, results) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
-        }
-        res.json(results);
-    });
+// Get all discounts
+exports.getAllDiscounts = async (req, res) => {
+    try {
+        const discounts = await Discount.getAll();
+        res.status(200).json(discounts);
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.getDiscountById = (req, res) => {
-    const { id } = req.params;
-    Discount.getById(id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
+// Get discount by ID
+exports.getDiscountById = async (req, res) => {
+    const discountId = req.params.id;
+    try {
+        const discount = await Discount.getById(discountId);
+        if (!discount) {
+            return res.status(404).json({ message: "Discount not found" });
         }
-        res.json(result[0]);
-    });
+        res.status(200).json(discount);
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.createDiscount = (req, res) => {
-    const { duration, amount } = req.body;
-    const newDiscount = { duration, amount };
-
-    Discount.create(newDiscount, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error creating discount', error: err });
-        }
-        res.status(201).json({ message: 'Discount created successfully' });
-    });
+// Create new discount
+exports.createDiscount = async (req, res) => {
+    try {
+        const result = await Discount.create(req.body);
+        res.status(201).json({ message: "Discount created successfully", discountId: result.insertId });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.updateDiscount = (req, res) => {
-    const { id } = req.params;
-    const { duration, amount } = req.body;
-
-    Discount.update(id, { duration, amount }, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error updating discount', error: err });
+// Update discount
+exports.updateDiscount = async (req, res) => {
+    const discountId = req.params.id;
+    try {
+        const result = await Discount.update(discountId, req.body);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Discount not found" });
         }
-        res.json({ message: 'Discount updated successfully' });
-    });
+        res.status(200).json({ message: "Discount updated successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.deleteDiscount = (req, res) => {
-    const { id } = req.params;
-    Discount.delete(id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
+// Delete discount
+exports.deleteDiscount = async (req, res) => {
+    const discountId = req.params.id;
+    try {
+        const result = await Discount.delete(discountId);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Discount not found" });
         }
-        res.json({ message: 'Discount deleted successfully' });
-    });
+        res.status(200).json({ message: "Discount deleted successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };

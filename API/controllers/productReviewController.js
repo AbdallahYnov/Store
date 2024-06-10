@@ -1,54 +1,78 @@
 const ProductReview = require('../models/productReviewModel');
 
-exports.getAllProductReviews = (req, res) => {
-    ProductReview.getAll((err, results) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
-        }
-        res.json(results);
-    });
+// Get all product reviews
+exports.getAllProductReviews = async (req, res) => {
+    try {
+        const productReviews = await ProductReview.getAll();
+        res.status(200).json(productReviews);
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.getProductReviewById = (req, res) => {
-    const { id } = req.params;
-    ProductReview.getById(id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
+// Get product review by ID
+exports.getProductReviewById = async (req, res) => {
+    const productReviewId = req.params.id;
+    try {
+        const productReview = await ProductReview.getById(productReviewId);
+        if (!productReview) {
+            return res.status(404).json({ message: "Product review not found" });
         }
-        res.json(result[0]);
-    });
+        res.status(200).json(productReview);
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.createProductReview = (req, res) => {
-    const { rating, is_positive, product_id, user_id } = req.body;
-    const newProductReview = { rating, is_positive, product_id, user_id };
-
-    ProductReview.create(newProductReview, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error creating product review', error: err });
-        }
-        res.status(201).json({ message: 'Product review created successfully' });
-    });
+// Create new product review
+exports.createProductReview = async (req, res) => {
+    try {
+        const result = await ProductReview.create(req.body);
+        res.status(201).json({ message: "Product review created successfully", productReviewId: result.insertId });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.updateProductReview = (req, res) => {
-    const { id } = req.params;
-    const { rating, is_positive, product_id, user_id } = req.body;
-
-    ProductReview.update(id, { rating, is_positive, product_id, user_id }, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error updating product review', error: err });
+// Update product review
+exports.updateProductReview = async (req, res) => {
+    const productReviewId = req.params.id;
+    try {
+        const result = await ProductReview.update(productReviewId, req.body);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Product review not found" });
         }
-        res.json({ message: 'Product review updated successfully' });
-    });
+        res.status(200).json({ message: "Product review updated successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.deleteProductReview = (req, res) => {
-    const { id } = req.params;
-    ProductReview.delete(id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
+// Delete product review
+exports.deleteProductReview = async (req, res) => {
+    const productReviewId = req.params.id;
+    try {
+        const result = await ProductReview.delete(productReviewId);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Product review not found" });
         }
-        res.json({ message: 'Product review deleted successfully' });
-    });
+        res.status(200).json({ message: "Product review deleted successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };

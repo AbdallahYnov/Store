@@ -1,54 +1,78 @@
 const Category = require('../models/categoryModel');
 
-exports.getAllCategories = (req, res) => {
-    Category.getAll((err, results) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
-        }
-        res.json(results);
-    });
+// Get all categories
+exports.getAllCategories = async (req, res) => {
+    try {
+        const categories = await Category.getAll();
+        res.status(200).json(categories);
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.getCategoryById = (req, res) => {
-    const { id } = req.params;
-    Category.getById(id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
+// Get category by ID
+exports.getCategoryById = async (req, res) => {
+    const categoryId = req.params.id;
+    try {
+        const category = await Category.getById(categoryId);
+        if (!category) {
+            return res.status(404).json({ message: "Category not found" });
         }
-        res.json(result[0]);
-    });
+        res.status(200).json(category);
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.createCategory = (req, res) => {
-    const { name, size } = req.body;
-    const newCategory = { name, size };
-
-    Category.create(newCategory, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error creating category', error: err });
-        }
-        res.status(201).json({ message: 'Category created successfully' });
-    });
+// Create new category
+exports.createCategory = async (req, res) => {
+    try {
+        const result = await Category.create(req.body);
+        res.status(201).json({ message: "Category created successfully", categoryId: result.insertId });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.updateCategory = (req, res) => {
-    const { id } = req.params;
-    const { name, size } = req.body;
-
-    Category.update(id, { name, size }, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error updating category', error: err });
+// Update category
+exports.updateCategory = async (req, res) => {
+    const categoryId = req.params.id;
+    try {
+        const result = await Category.update(categoryId, req.body);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Category not found" });
         }
-        res.json({ message: 'Category updated successfully' });
-    });
+        res.status(200).json({ message: "Category updated successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
 
-exports.deleteCategory = (req, res) => {
-    const { id } = req.params;
-    Category.delete(id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
+// Delete category
+exports.deleteCategory = async (req, res) => {
+    const categoryId = req.params.id;
+    try {
+        const result = await Category.delete(categoryId);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Category not found" });
         }
-        res.json({ message: 'Category deleted successfully' });
-    });
+        res.status(200).json({ message: "Category deleted successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 };
