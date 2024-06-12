@@ -2,7 +2,7 @@ const axios = require('axios');
 // Get all products
 exports.getAllProducts = async (req, res) => {
     try {
-        const response = await axios.get('http://localhost:3000/discounts');
+        const response = await axios.get('http://localhost:3000/products');
         const products = response.data;
 
         // Render 'products' view with data
