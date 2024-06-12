@@ -22,8 +22,33 @@ exports.getProductById = async (req, res) => {
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
-        product.picture = `${link}/image/${product.picture}`; // If your product has a 'picture' field
+        if (product.picture) {
+            product.picture = `${link}/image/${product.picture}`; // Ensure product has 'picture' field
+        }
         res.status(200).json(product);
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
+};
+
+// Get products by price
+exports.getProductByPrice = async (req, res) => {
+    const productPrice = req.params.price;
+    const link = req.protocol + '://' + req.get('host');
+    try {
+        const products = await Product.getByPrice(productPrice);
+        if (!products || products.length === 0) {
+            return res.status(404).json({ message: "No products found at this price" });
+        }
+        products.forEach(product => {
+            if (product.picture) {
+                product.picture = `${link}/image/${product.picture}`;
+            }
+        });
+        res.status(200).json(products);
     } catch (error) {
         res.status(500).json({
             message: "Internal server error",

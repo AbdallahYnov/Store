@@ -8,4 +8,6 @@ app.use(cors({
     origin: '*'
 })) 
 
-app.listen(port, () => console.log(`listening on port  ${port}`));
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
