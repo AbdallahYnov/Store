@@ -15,7 +15,6 @@ exports.getAllProducts = async (req, res) => {
     }
 };
 
-const axios = require('axios');
 
 exports.getProductById = async (req, res) => {
     const productId = req.params.id;
@@ -35,7 +34,6 @@ exports.getProductById = async (req, res) => {
     }
 };
 
-const axios = require('axios');
 
 exports.getProductByPrice = async (req, res) => {
     const productPrice = req.params.price;
@@ -57,8 +55,6 @@ exports.getProductByPrice = async (req, res) => {
     }
 };
 
-const axios = require('axios');
-
 exports.updateProduct = async (req, res) => {
     const productId = req.params.id;
     try {
@@ -73,7 +69,6 @@ exports.updateProduct = async (req, res) => {
     }
 };
 
-const axios = require('axios');
 
 exports.deleteProduct = async (req, res) => {
     const productId = req.params.id;
@@ -94,6 +89,46 @@ exports.createProduct = async (req, res) => {
         const response = await axios.post('http://localhost:3000/products', req.body);
         const result = response.data;
         res.render('success', { message: "Product created successfully", productId: result.insertId });
+    } catch (error) {
+        res.render('error', { message: "Internal server error" });
+    }
+};
+
+exports.createUser = async (req, res) => {
+    try {
+        const response = await axios.post('http://localhost:3000/users', req.body);
+        const result = response.data;
+        res.render('success', { message: "User created successfully", userId: result.insertId });
+    } catch (error) {
+        res.render('error', { message: "Internal server error" });
+    }
+};
+
+
+exports.getUserById = async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const response = await axios.get(`http://localhost:3000/users/${userId}`);
+        const user = response.data;
+        if (!user) {
+            return res.render('error', { message: "User not found" });
+        }
+        res.render('user', { user });
+    } catch (error) {
+        res.render('error', { message: "Internal server error" });
+    }
+};
+
+
+exports.getOrderById = async (req, res) => {
+    const orderId = req.params.id;
+    try {
+        const response = await axios.get(`http://localhost:3000/orders/${orderId}`);
+        const order = response.data;
+        if (!order) {
+            return res.render('error', { message: "Order not found" });
+        }
+        res.render('order', { order });
     } catch (error) {
         res.render('error', { message: "Internal server error" });
     }
