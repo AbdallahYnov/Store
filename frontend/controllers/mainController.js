@@ -94,3 +94,45 @@ exports.deleteProduct = async (req, res) => {
     }
 };
 
+
+exports.createUser = async (req, res) => {
+    try {
+        const response = await axios.post('http://localhost:3000/users', req.body);
+        const result = response.data;
+        res.render('success', { message: "User created successfully", userId: result.insertId });
+    } catch (error) {
+        res.render('error', { message: "Internal server error" });
+    }
+};
+
+
+exports.getUserById = async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const response = await axios.get(`http://localhost:3000/users/${userId}`);
+        const user = response.data;
+        if (!user) {
+            return res.render('error', { message: "User not found" });
+        }
+        res.render('user', { user });
+    } catch (error) {
+        res.render('error', { message: "Internal server error" });
+    }
+};
+
+const axios = require('axios');
+
+exports.getOrderById = async (req, res) => {
+    const orderId = req.params.id;
+    try {
+        const response = await axios.get(`http://localhost:3000/orders/${orderId}`);
+        const order = response.data;
+        if (!order) {
+            return res.render('error', { message: "Order not found" });
+        }
+        res.render('order', { order });
+    } catch (error) {
+        res.render('error', { message: "Internal server error" });
+    }
+};
+
