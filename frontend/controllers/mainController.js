@@ -120,8 +120,6 @@ exports.getUserById = async (req, res) => {
     }
 };
 
-const axios = require('axios');
-
 exports.getOrderById = async (req, res) => {
     const orderId = req.params.id;
     try {
