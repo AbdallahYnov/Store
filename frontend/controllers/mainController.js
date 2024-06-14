@@ -15,8 +15,6 @@ exports.getAllProducts = async (req, res) => {
     }
 };
 
-const axios = require('axios');
-
 exports.getProductById = async (req, res) => {
     const productId = req.params.id;
     const link = req.protocol + '://' + req.get('host');
@@ -34,8 +32,6 @@ exports.getProductById = async (req, res) => {
         res.render('error', { message: "Internal server error" });
     }
 };
-
-const axios = require('axios');
 
 exports.getProductByPrice = async (req, res) => {
     const productPrice = req.params.price;
@@ -57,7 +53,16 @@ exports.getProductByPrice = async (req, res) => {
     }
 };
 
-const axios = require('axios');
+exports.createProduct = async (req, res) => {
+    try {
+        const response = await axios.post('http://localhost:3000/products', req.body);
+        const result = response.data;
+        res.render('success', { message: "Product created successfully", productId: result.insertId });
+    } catch (error) {
+        res.render('error', { message: "Internal server error" });
+    }
+};
+
 
 exports.updateProduct = async (req, res) => {
     const productId = req.params.id;
@@ -73,8 +78,6 @@ exports.updateProduct = async (req, res) => {
     }
 };
 
-const axios = require('axios');
-
 exports.deleteProduct = async (req, res) => {
     const productId = req.params.id;
     try {
@@ -89,12 +92,3 @@ exports.deleteProduct = async (req, res) => {
     }
 };
 
-exports.createProduct = async (req, res) => {
-    try {
-        const response = await axios.post('http://localhost:3000/products', req.body);
-        const result = response.data;
-        res.render('success', { message: "Product created successfully", productId: result.insertId });
-    } catch (error) {
-        res.render('error', { message: "Internal server error" });
-    }
-};
