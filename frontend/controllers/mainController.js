@@ -88,3 +88,13 @@ exports.deleteProduct = async (req, res) => {
         res.render('error', { message: "Internal server error" });
     }
 };
+
+exports.createProduct = async (req, res) => {
+    try {
+        const response = await axios.post('http://localhost:3000/products', req.body);
+        const result = response.data;
+        res.render('success', { message: "Product created successfully", productId: result.insertId });
+    } catch (error) {
+        res.render('error', { message: "Internal server error" });
+    }
+};
