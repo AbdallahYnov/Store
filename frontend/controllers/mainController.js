@@ -520,20 +520,10 @@ exports.getUserById = async (req, res) => {
     }
 };
 
-// Create new user
-exports.createUser = async (req, res) => {
-    try {
-        const response = await axios.post('http://localhost:3000/users', req.body);
-        const result = response.data;
-        res.render('success', { message: "User created successfully", userId: result.insertId });
-    } catch (error) {
-        res.render('error', { message: "Internal server error" });
-    }
-};
+const axios = require('axios');
 
-// Update user
-exports.updateUser = async (req, res) => {
-    const userId = req.params.id;
+exports.getOrderById = async (req, res) => {
+    const orderId = req.params.id;
     try {
         const response = await axios.put(`http://localhost:3000/users/${userId}`, req.body);
         const result = response.data;
