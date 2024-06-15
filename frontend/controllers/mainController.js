@@ -5,7 +5,12 @@ exports.getHomePage = async (req, res) => {
     try {
         const response = await axios.get('http://localhost:3000/products');
         const products = response.data;
-        res.render('home', { products });
+        res.render('index', {
+            title: "Accueil",
+            products,
+            stylesheets: ['/css/style.css'], // Incluez les styles nécessaires
+            scripts: ['/js/carrousel.js', '/js/menu.js'] // Incluez les scripts nécessaires
+        });
     } catch (error) {
         res.render('error', { message: "Erreur interne du serveur" });
     }
