@@ -1,5 +1,16 @@
 const axios = require('axios');
 
+// Get all products and show them on the homepage
+exports.getHomePage = async (req, res) => {
+    try {
+        const response = await axios.get('http://localhost:3000/products');
+        const products = response.data;
+        res.render('home', { products });
+    } catch (error) {
+        res.render('error', { message: "Erreur interne du serveur" });
+    }
+};
+
 // Get all categories
 exports.getAllCategories = async (req, res) => {
     try {
