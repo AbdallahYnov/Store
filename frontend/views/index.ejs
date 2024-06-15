@@ -1,29 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="/frontend/css/style.css">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <% if (stylesheets) { %>
+        <% stylesheets.forEach(stylesheet => { %>
+            <link rel="stylesheet" href="<%= stylesheet %>">
+        <% }) %>
+    <% } %>
 </head>
+
 <body>
-    <header>
-        <h1>Amazon-like Store</h1>
-        <nav>
-            <ul>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/register">Register</a></li>
-                <li><a href="/cart">Cart</a></li>
-                <li><a href="/profile">Profile</a></li>
-            </ul>
-        </nav>
-    </header>
+    <%- include('partials/header') %>
+
     <main>
-        <h2>Welcome to our Store</h2>
-        <p>Browse our categories and find your desired products.</p>
+        <h2>Bienvenue dans notre Boutique</h2>
+        <p>Explorez nos catégories et trouvez les produits que vous désirez.</p>
+
+        <!-- Carrousel -->
+        <div class="carousel">
+            <button class="carousel-control prev" onclick="prevSlide()">&#10094;</button>
+            <div class="carousel-inner">
+                <!-- Insérer vos images de carrousel ici -->
+            </div>
+            <button class="carousel-control next" onclick="nextSlide()">&#10095;</button>
+        </div>
+
+        <h2>Produits</h2>
+        <ul>
+            <% products.forEach(product => { %>
+                <li>
+                    <a href="/products/<%= product._id %>"><%= product.name %></a>
+                    - $<%= product.price %>
+                    <a href="/products/edit/<%= product._id %>">Modifier</a>
+                    <form action="/products/delete/<%= product._id %>" method="POST" style="display:inline;">
+                        <button type="submit">Supprimer</button>
+                    </form>
+                </li>
+            <% }) %>
+        </ul>
+        <a href="/products/new">Ajouter un Nouveau Produit</a>
     </main>
-    <footer>
-        <p>&copy; 2024 Amazon-like Store</p>
-    </footer>
+
+    <%- include('partials/footer') %>
+
+    <script src="/js/carrousel.js"></script>
+    <script src="/js/menu.js"></script>
+    <% if (scripts) { %>
+        <% scripts.forEach(script => { %>
+            <script src="<%= script %>"></script>
+        <% }) %>
+    <% } %>
 </body>
 </html>
