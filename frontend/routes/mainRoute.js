@@ -3,6 +3,7 @@ const router = express.Router();
 const mainController = require('../controllers/mainController');
 
 router.get('/', mainController.getHomePage);
+
 router.get('/products', mainController.getAllProducts);
 router.get('/products/:id', mainController.getProductById);
 router.get('/register', mainController.createUser);
