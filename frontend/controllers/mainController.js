@@ -21,7 +21,7 @@ exports.getProductPage = async (req, res) => {
         const response = await axios.get('http://localhost:3000/products');
         const products = response.data;
         res.render('product', {
-            title: "Accueil",
+            title: "Products",
             products,
             stylesheets: ['/css/style.css'], // Incluez les styles nécessaires
             scripts: ['/js/carrousel.js', '/js/menu.js'] // Incluez les scripts nécessaires
