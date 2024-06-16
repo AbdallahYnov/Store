@@ -60,6 +60,7 @@ nav ul li a {
 
 main {
     padding: 20px;
+    padding-top: 10vh;
 }
 
 footer {
@@ -138,9 +139,8 @@ footer {
 }
 
 .carousel-item img {
-    width: 100%;
-    max-width: 150px;
-    height: auto;
+    width: auto;
+
     margin-bottom: 10px;
 }
 

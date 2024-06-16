@@ -376,24 +376,24 @@ exports.getProductPage = async (req, res) => {
 //     }
 // };
 
-// // Get product by ID
-// exports.getProductById = async (req, res) => {
-//     const productId = req.params.id;
-//     const link = req.protocol + '://' + req.get('host');
-//     try {
-//         const response = await axios.get(`http://localhost:3000/products/${productId}`);
-//         const product = response.data;
-//         if (!product) {
-//             return res.render('error', { message: "Product not found" });
-//         }
-//         if (product.picture) {
-//             product.picture = `${link}/image/${product.picture}`;
-//         }
-//         res.render('product', { product });
-//     } catch (error) {
-//         res.render('error', { message: "Internal server error" });
-//     }
-// };
+// Get product by ID
+exports.getProductById = async (req, res) => {
+    const productId = req.params.id;
+    const link = req.protocol + '://' + req.get('host');
+    try {
+        const response = await axios.get(`http://localhost:3000/products/${productId}`);
+        const product = response.data;
+        if (!product) {
+            return res.render('error', { message: "Product not found" });
+        }
+        if (product.picture) {
+            product.picture = `${link}/image/${product.picture}`;
+        }
+        res.render('product', { product });
+    } catch (error) {
+        res.render('error', { message: "Internal server error" });
+    }
+};
 
 // // Get products by price
 // exports.getProductByPrice = async (req, res) => {

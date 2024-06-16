@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser')
 const path = require('path'); // Utilisé pour gérer les chemins
 const app = express();
 const port = 4000;
@@ -16,10 +17,12 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views')); // Configuration du répertoire des vues
 
 // Middleware pour servir les fichiers statiques
-app.use(express.static(path.join(__dirname, 'public'))); // Chemin vers les fichiers statiques
+app.use('/static', express.static(path.join(__dirname, 'public'))); // Chemin vers les fichiers statiques
+
 
 // Middleware pour analyser les données des formulaires
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(express.json()); // Pour les données JSON
 
 // Utilisation des routes

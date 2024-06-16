@@ -6,7 +6,7 @@ router.get('/', mainController.getHomePage);
 router.get('/products', mainController.getProductPage)
 
 // router.get('/products', mainController.getAllProducts);
-// router.get('/products/:id', mainController.getProductById);
+router.get('/products/:id', mainController.getProductById);
 // router.get('/register', mainController.createUser);
 // router.get('/register/done', mainController.registerUser);
 // router.get('/login', mainController.getLoginPage);

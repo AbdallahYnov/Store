@@ -1,0 +1,63 @@
+.carousel {
+    position: relative;
+    max-width: 100%;
+    margin: auto;
+    overflow: hidden;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px; /* Ajout d'espace entre les carrousels */
+}
+
+.carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    min-width: 33.33%; /* Affiche 3 éléments côte à côte */
+    box-sizing: border-box;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 10px; /* Ajout de padding entre les éléments */
+}
+
+.carousel-item img {
+    border-bottom: 1px solid #ddd;
+}
+
+.carousel-caption {
+    padding: 10px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.8);
+    width: 100%;
+}
+
+.carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.carousel-control.prev {
+    left: 0;
+}
+
+.carousel-control.next {
+    right: 0;
+}
+
+/* Médias queries pour les petits écrans */
+@media (max-width: 768px) {
+    .carousel-item {
+        min-width: 100%; /* Affiche un seul élément par ligne */
+    }
+}

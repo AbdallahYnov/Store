@@ -1,57 +1,107 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/carroussel.css">
+
     <% if (stylesheets) { %>
-        <% stylesheets.forEach(stylesheet => { %>
+        <% stylesheets.forEach(stylesheet=> { %>
             <link rel="stylesheet" href="<%= stylesheet %>">
-        <% }) %>
-    <% } %>
+            <% }) %>
+                <% } %>
 </head>
 
 <body>
+
+
+
     <%- include('partials/header') %>
 
-    <main>
-        <h2>Bienvenue dans notre Boutique</h2>
-        <p>Explorez nos catégories et trouvez les produits que vous désirez.</p>
+        <main>
+            <!-- Carrousel pour la catégorie 1 -->
+            <section>
+                <div class="carousel" id="carousel-category-1">
+                    <button class="carousel-control prev" onclick="prevSlide('carousel-category-1')">&#10094;</button>
+                    <div class="carousel-inner">
+                        <% products.filter(p=> p.category_id === 1).forEach(product => { %>
+                            <div class="carousel-item">
+                                <a href="/products/<%=product.product_id%>">
+                                    <img src="/static/images/<%= product.name%>.jpg" alt="<%= product.name %>"
+                                        width=300px height=300>
+                                    <div class="carousel-caption">
+                                        <h3>
+                                            <%= product.name %>
+                                        </h3>
+                                        <p>$<%= product.price %>
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                            <% }) %>
+                    </div>
+                    <button class="carousel-control next" onclick="nextSlide('carousel-category-1')">&#10095;</button>
+                </div>
+            </section>
 
-        <!-- Carrousel -->
-        <div class="carousel">
-            <button class="carousel-control prev" onclick="prevSlide()">&#10094;</button>
-            <div class="carousel-inner">
-                <!-- Insérer vos images de carrousel ici -->
-            </div>
-            <button class="carousel-control next" onclick="nextSlide()">&#10095;</button>
-        </div>
+            <section>
+                <div class="carousel" id="carousel-category-2">
+                    <button class="carousel-control prev" onclick="prevSlide('carousel-category-2')">&#10094;</button>
+                    <div class="carousel-inner">
+                        <% products.filter(p=> p.category_id === 2).forEach(product => { %>
+                            <div class="carousel-item">
+                                <a href="/products/<%=product.product_id%>">
+                                    <img src="/static/images/<%= product.name%>.jpg" alt="<%= product.name %>"
+                                        width=300px height=300>
+                                    <div class="carousel-caption">
+                                        <h3>
+                                            <%= product.name %>
+                                        </h3>
+                                        <p>$<%= product.price %>
+                                        </p>
+                                    </div>
+                                </a>
 
-        <h2>Produits</h2>
-        <ul>
-            <% products.forEach(product => { %>
-                <li>
-                    <a href="/products/<%= product._id %>"><%= product.name %></a>
-                    - $<%= product.price %>
-                    <a href="/products/edit/<%= product._id %>">Modifier</a>
-                    <form action="/products/delete/<%= product._id %>" method="POST" style="display:inline;">
-                        <button type="submit">Supprimer</button>
-                    </form>
-                </li>
-            <% }) %>
-        </ul>
-        <a href="/products/new">Ajouter un Nouveau Produit</a>
-    </main>
+                            </div>
+                            <% }) %>
+                    </div>
+                    <button class="carousel-control next" onclick="nextSlide('carousel-category-2')">&#10095;</button>
+                </div>
+            </section>
+            <section>
+                <div class="carousel" id="carousel-category-3">
+                    <button class="carousel-control prev" onclick="prevSlide('carousel-category-3')">&#10094;</button>
+                    <div class="carousel-inner">
+                        <% products.filter(p=> p.category_id === 3).forEach(product => { %>
+                            <div class="carousel-item">
+                                <a href="/products/<%=product.product_id%>">
+                                    <img src="/static/images/<%= product.name%>.jpg" alt="<%= product.name %>"
+                                        width=300px height=300>
+                                    <div class="carousel-caption">
+                                        <h3>
+                                            <%= product.name %>
+                                        </h3>
+                                        <p>$<%= product.price %>
+                                        </p>
+                                    </div>
+                                </a>
 
-    <%- include('partials/footer') %>
+                            </div>
+                            <% }) %>
+                    </div>
+                    <button class="carousel-control next" onclick="nextSlide('carousel-category-3')">&#10095;</button>
+                </div>
+            </section>
+        </main>
 
-    <script src="/js/carrousel.js"></script>
-    <script src="/js/menu.js"></script>
-    <% if (scripts) { %>
-        <% scripts.forEach(script => { %>
-            <script src="<%= script %>"></script>
-        <% }) %>
-    <% } %>
+        <%- include('partials/footer') %>
+
+            <script src="/static/js/carroussel.js"></script>
 </body>
+
 </html>

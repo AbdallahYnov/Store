@@ -3,56 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/style.css">
-    <% if (stylesheets) { %>
-        <% stylesheets.forEach(stylesheet => { %>
-            <link rel="stylesheet" href="<%= stylesheet %>">
-        <% }) %>
-    <% } %>
+    <title><%= product.name %></title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/product.css">
+
 </head>
 
 <body>
     <%- include('partials/header') %>
 
     <main>
-        <h2>Bienvenue dans notre Boutique</h2>
-        <p>Explorez nos catégories et trouvez les produits que vous désirez.</p>
-
-        <!-- Carrousel -->
-        <div class="carousel">
-            <button class="carousel-control prev" onclick="prevSlide()">&#10094;</button>
-            <div class="carousel-inner">
-                <!-- Insérer vos images de carrousel ici -->
+        <div class="product-details">
+            <h2><%= product.name %></h2>
+            <img src="/static/images/<%= product.name%>.jpg" alt="<%= product.name %>" width="150px" height="150px">
+            <p><strong>Price :</strong> $<%= product.price %></p>
+            <p><strong>Description :</strong> <%= product.description %></p>
+            <p><strong>Category :</strong> 
+                <% if (product.category_id === 1) { %>
+                    High Tech
+                <% } else if (product.category_id === 2) { %>
+                    Clothes and Accessories
+                <% } else if (product.category_id === 3) { %>
+                    Books
+                <% } %>
+            </p>
+            <div class="product-actions">
+                <!-- Formulaire pour "Add to Cart" -->
+                <form action="/cart/add" method="POST">
+                    <input type="hidden" name="productId" value="<%= product.id %>">
+                    <button type="submit" class="btn btn-cart">Add to Cart</button>
+                </form>
+                
+                <!-- Formulaire pour "Buy Now" -->
+                <form action="/checkout" method="POST">
+                    <input type="hidden" name="productId" value="<%= product.id %>">
+                    <button type="submit" class="btn btn-buy">Buy Now</button>
+                </form>
             </div>
-            <button class="carousel-control next" onclick="nextSlide()">&#10095;</button>
         </div>
-
-        <h2>Produits</h2>
-        <ul>
-            <% products.forEach(product => { %>
-                <li>
-                    <a href="/products/<%= product._id %>"><%= product.name %></a>
-                    - $<%= product.price %>
-                    <a href="/products/edit/<%= product._id %>">Modifier</a>
-                    <form action="/products/delete/<%= product._id %>" method="POST" style="display:inline;">
-                        <button type="submit">Supprimer</button>
-                    </form>
-                </li>
-            <% }) %>
-        </ul>
-        <a href="/products/new">Ajouter un Nouveau Produit</a>
     </main>
+        </div>
+        
+
 
     <%- include('partials/footer') %>
-
-    <script src="/js/carrousel.js"></script>
-    <script src="/js/menu.js"></script>
-    <% if (scripts) { %>
-        <% scripts.forEach(script => { %>
-            <script src="<%= script %>"></script>m
-        <% }) %>
-    <% } %>
 </body>
 </html>
-
