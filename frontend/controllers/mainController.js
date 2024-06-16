@@ -30,6 +30,69 @@ exports.getProductPage = async (req, res) => {
         res.render('error', { message: "Erreur interne du serveur" });
     }
 };
+
+const cookieParser = require('cookie-parser'); // Assurez-vous d'avoir `cookie-parser` dans vos dépendances
+
+
+// Ajoute un produit au panier
+exports.addToCart = (req, res) => {
+    const { productId, quantity } = req.body;
+    const cart = req.cookies.cart || [];
+
+    // Cherche si le produit est déjà dans le panier
+    const existingProduct = cart.find(item => item.productId === productId);
+
+    if (existingProduct) {
+        existingProduct.quantity += parseInt(quantity, 10);
+    } else {
+        cart.push({ productId, quantity: parseInt(quantity, 10) });
+    }
+
+    // Sauvegarde le panier dans les cookies
+    res.cookie('cart', cart, { httpOnly: true, secure: false }); // Ajustez les options comme nécessaire
+    res.redirect('/cart'); // Redirige vers la page du panier
+};
+
+
+
+// Supprime un produit du panier
+exports.removeFromCart = (req, res) => {
+    const { productId } = req.body;
+    let cart = req.cookies.cart || [];
+    cart = cart.filter(item => item.productId !== productId);
+
+    res.cookie('cart', cart, { httpOnly: true, secure: false }); // Ajustez les options comme nécessaire
+    res.redirect('/cart'); // Redirige vers la page du panier
+};
+
+
+// Récupère les détails des produits dans le panier
+exports.getCart = async (req, res) => {
+    const cart = req.cookies.cart || [];
+    if (cart.length === 0) {
+        return res.json([]);
+    }
+
+    try {
+        const productDetails = await Promise.all(cart.map(async (item) => {
+            const response = await axios.get(`http://localhost:3000/products/${item.productId}`);
+            response.data["CartQuantity"] = item.quantity
+
+            return {
+                ...response.data,
+            };
+        }));
+        res.render('cart',{data : productDetails});
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la récupération des détails des produits" });
+    }
+};
+
+
+
+// Ajoute un produit au panier
+
+
 // // Get all categories
 // exports.getAllCategories = async (req, res) => {
 //     try {

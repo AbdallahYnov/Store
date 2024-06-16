@@ -6,7 +6,6 @@
     <title><%= product.name %></title>
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/product.css">
-
 </head>
 
 <body>
@@ -15,10 +14,10 @@
     <main>
         <div class="product-details">
             <h2><%= product.name %></h2>
-            <img src="/static/images/<%= product.name%>.jpg" alt="<%= product.name %>" width="150px" height="150px">
-            <p><strong>Price :</strong> $<%= product.price %></p>
+            <img src="/static/images/<%= product.name%>.jpg" alt="<%= product.name %>">
+            <p><strong>Prix :</strong> $<%= product.price %></p>
             <p><strong>Description :</strong> <%= product.description %></p>
-            <p><strong>Category :</strong> 
+            <p><strong>Catégorie :</strong> 
                 <% if (product.category_id === 1) { %>
                     High Tech
                 <% } else if (product.category_id === 2) { %>
@@ -27,10 +26,13 @@
                     Books
                 <% } %>
             </p>
+
             <div class="product-actions">
                 <!-- Formulaire pour "Add to Cart" -->
                 <form action="/cart/add" method="POST">
-                    <input type="hidden" name="productId" value="<%= product.id %>">
+                    <input type="hidden" name="productId" value="<%= product.product_id %>">
+                    <label for="quantity">Quantité:</label>
+                    <input type="number" name="quantity" value="1" min="1">
                     <button type="submit" class="btn btn-cart">Add to Cart</button>
                 </form>
                 
@@ -42,9 +44,6 @@
             </div>
         </div>
     </main>
-        </div>
-        
-
 
     <%- include('partials/footer') %>
 </body>

@@ -12,7 +12,10 @@ router.get('/products/:id', mainController.getProductById);
 // router.get('/login', mainController.getLoginPage);
 // router.get('/profile/:id', mainController.getUserById);
 // router.get('/orders', mainController.getOrderById);
-// router.get('/cart', mainController.getCartPage);
+router.get('/cart', mainController.getCart);
+router.post('/cart/add', mainController.addToCart);
+router.delete('/cart/remove', mainController.removeFromCart);
+
 // router.get('/checkout', mainController.getCheckoutPage);
 // router.get('/error', mainController.getErrorPage);
 

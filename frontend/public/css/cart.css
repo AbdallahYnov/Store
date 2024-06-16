@@ -1,0 +1,95 @@
+/* Style général pour la page du panier */
+
+main {
+    padding: 20px;
+    max-width: 1200px;
+    margin:auto;
+    margin-top : 5vh;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #444;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+main.li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fafafa;
+}
+
+li img {
+    margin-right: 20px;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+li form {
+    margin-left: auto;
+}
+
+li form .btn {
+    border: none;
+    background-color: #ff6666;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+li form .btn:hover {
+    background-color: #ff3333;
+}
+
+#cart-summary {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #444;
+}
+
+#checkout-button {
+    display: block;
+    text-align: center;
+    width: 100%;
+    padding: 10px 0;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 1.1em;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+#checkout-button:hover {
+    background-color: #45a049;
+}
+
+.btn-remove {
+    background-color: #ff6666;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-remove:hover {
+    background-color: #ff3333;
+}
