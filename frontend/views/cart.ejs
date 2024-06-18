@@ -22,7 +22,7 @@
                     <li>
                         <img src="/static/images/<%=item.name%>.jpg" alt="<%= item.name %>" width="50">
                         <%= item.name %> - $<%= item.price %> x <%= item.CartQuantity %>
-                        <form action="/cart/remove" method="POST" style="display:inline;">
+                        <form action="/cart/remove" method="DELETE" style="display:inline;">
                             <input type="hidden" name="productId" value="<%= item.productId %>">
                             <button type="submit" class="btn btn-remove">Remove</button>
                         </form>
