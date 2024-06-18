@@ -25,3 +25,4 @@ Reminder: ALL OF THE ABOVE NEED TO BE DONE IN THE API DIRECTORY (cd API)
 Make sure to download express again here
 Run "npm install X" and replace "X" by the following dependencies:
 - express
+- cookie-parser
